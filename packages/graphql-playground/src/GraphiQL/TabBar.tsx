@@ -41,6 +41,9 @@ export const TabBar = withTheme<
             height: 57px;
             background-color: $darkBlueGray;
 
+            /* Keep the titleBar draggable */
+            -webkit-app-region: drag;
+
             path {
               stroke: white;
             }
@@ -67,6 +70,9 @@ export const TabBar = withTheme<
             height: 43px;
             padding: 10px;
             padding-top: 9px;
+
+            -webkit-app-region: no-drag;
+
             &.active {
               @inherit: .bgDarkBlue;
             }
@@ -145,6 +151,8 @@ export const TabBar = withTheme<
 
           .history {
             @inherit: .pointer;
+
+            -webkit-app-region: no-drag;
           }
 
           .change-theme {

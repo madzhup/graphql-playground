@@ -153,6 +153,7 @@ class InitialView extends React.Component<
             background-color: #2a7ed3;
           }
         `}</style>
+        <div className='dragable' />
         <Modal
           isOpen={isOpen}
           contentLabel="initial view"

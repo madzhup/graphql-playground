@@ -136,14 +136,6 @@ export default class App extends React.Component<{}, State> {
           .root.light {
             background-color: #dbdee0;
           }
-          .titlebar {
-            @p: .absolute, .top0, .right0, .left0;
-            /* Size of the osx titleBar */
-            height: 24px;
-            /* Keep the titleBar draggable */
-            -webkit-user-select: none;
-            -webkit-app-region: drag;
-          }
           .app-content {
             @p: .flex, .flexRow;
           }
@@ -198,10 +190,9 @@ export default class App extends React.Component<{}, State> {
             @p: .mr10;
           }
           .wrapper-toggle-theme .icon {
-            @p: .mr20, .pointer, .relative;
+            @p: .pointer, .relative;
           }
         `}</style>
-        <div className="titlebar" />
         <Provider store={store}>
           <ThemeProvider theme={theme}>
             <InitialView
