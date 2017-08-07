@@ -5,24 +5,23 @@
   "typings": "./lib/index.d.ts",
   "scripts": {
     "start": "node scripts/start.js",
-    "prepublish": "npm run build",
-    "build": "rm -rf lib; yarn build-app; yarn build-package; yarn build-middleware;",
+    "prepublish": "yarn build",
+    "copy-styles": "cat src/styles/*.css > playground.css",
+    "build": "rm -rf lib; yarn build-app; yarn build-package; yarn build-middleware; yarn copy-styles",
     "build-package": "rm -rf lib; tsc -p tsconfig.build.json --noUnusedLocals --noUnusedParameters; babel lib -d lib; cp -r ./src/assets/ ./lib/assets/; cp src/CodeGenerationPopup/CodeMirror.js ./lib/CodeGenerationPopup/CodeMirror.js; cd lib && rm -rf *.jsx;",
     "build-app": "node scripts/build.js",
     "build-middleware": "rm -rf middleware && tsc src/middleware/index.ts --outDir middleware --lib ES6,DOM --declaration",
-    "test": "npm run lint && node scripts/test.js --env=jsdom",
+    "test": "node scripts/test.js --env=jsdom",
     "bump": "npm version patch --no-git-tag-version && git add package.json",
     "graphql-faker": "graphql-faker ./tests/schema.faker.graphql",
     "lint": "tslint \"src/**/*.ts{,x}\"",
+    "precommit": "lint-staged",
     "prettier": "prettier --single-quote --no-semi --trailing-comma all --write *.{ts,tsx} 'src/**/*.{ts,tsx}'"
   },
   "files": [
     "build",
     "lib",
-    "middleware",
-    "base.css",
-    "graphiql_light.css",
-    "graphiql_dark.css"
+    "middleware"
   ],
   "devDependencies": {
     "@types/express": "^4.0.36",
@@ -55,6 +54,7 @@
     "gzip-size": "3.0.0",
     "html-webpack-plugin": "2.24.0",
     "http-proxy-middleware": "0.17.2",
+    "husky": "^0.14.3",
     "jest": "^20.0.4",
     "json-loader": "0.5.4",
     "lint-staged": "^4.0.2",
@@ -106,7 +106,8 @@
     "postcss-modules": "^0.6.4",
     "raw-loader": "^0.5.1",
     "react": "^15.4.2",
-    "react-addons-shallow-compare": "^15.4.2",
+    "react-addons-shallow-compare": "^15.6.0",
+    "react-codemirror": "^1.0.0",
     "react-dom": "^15.4.2",
     "react-modal": "^1.6.5",
     "react-redux": "^5.0.5",
@@ -118,7 +119,6 @@
     "rxjs": "^5.0.3",
     "seamless-immutable": "^7.0.1",
     "subscriptions-transport-ws": "^0.8.1",
-    "svg-loader": "^0.0.2",
     "svgo-loader": "^1.1.2"
   },
   "lint-staged": {

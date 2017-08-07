@@ -20,6 +20,6 @@
   ],
   "include": [
     "./src/**/*",
-     "custom.d.ts"
+     "typings/custom.d.ts"
   ]
 }

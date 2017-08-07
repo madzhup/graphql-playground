@@ -13,11 +13,8 @@
     "noImplicitAny": false,
     "strictNullChecks": true,
     "suppressImplicitAnyIndexErrors": true,
-    "noUnusedLocals": false
+    "noUnusedLocals": true
   },
-  "include": [
-     "custom.d.ts"
-  ],
   "exclude": [
     "node_modules"
   ]

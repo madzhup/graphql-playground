@@ -1,4 +1,4 @@
-import Playground from './Playground'
-import { CustomGraphiQL } from './GraphiQL/CustomGraphiQL'
+import Playground from './components/Playground'
+import { GraphQLEditor } from './components/Playground/GraphQLEditor'
 
-export { Playground, CustomGraphiQL }
+export { Playground, GraphQLEditor }

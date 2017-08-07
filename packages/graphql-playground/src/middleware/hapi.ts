@@ -3,6 +3,7 @@ import renderPlaygroundPage, {
   MiddlewareOptions,
 } from './render-playground-page'
 
+// tslint:disable-next-line
 const pkg = require('../package.json')
 
 export interface Register {
@@ -14,7 +15,7 @@ export interface Register {
 const hapi: Register = function(server, options, next) {
   if (arguments.length !== 3) {
     throw new Error(
-      `Voyager middleware expects exactly 3 arguments, got ${arguments.length}`,
+      `Playground middleware expects exactly 3 arguments, got ${arguments.length}`,
     )
   }
 
