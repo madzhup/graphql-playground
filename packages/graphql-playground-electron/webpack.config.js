@@ -9,7 +9,7 @@ const HappyPack = require('happypack')
 
 module.exports = {
   devtool: 'cheap-module-eval-source-map',
-  entry: './src/main',
+  entry: './src/root',
   target: 'electron',
   output: {
     filename: '[name].[hash].js',
@@ -68,11 +68,7 @@ module.exports = {
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
-    new ForkTsCheckerWebpackPlugin(
-      {
-        // watch: './src',
-      }
-    ),
+    new ForkTsCheckerWebpackPlugin({}),
     new webpack.DefinePlugin({
       __SUBSCRIPTIONS_EU_WEST_1__: JSON.stringify(
         process.env.SUBSCRIPTIONS_EU_WEST_1 ||
