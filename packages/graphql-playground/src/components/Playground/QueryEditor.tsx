@@ -10,6 +10,8 @@ import * as React from 'react'
 import { GraphQLSchema } from 'graphql'
 
 import onHasCompletion from 'graphiql/dist/utility/onHasCompletion'
+import renderHistory from './util/renderHistory'
+
 /**
  * QueryEditor
  *
@@ -63,7 +65,8 @@ export class QueryEditor extends React.Component<Props, {}> {
     require('codemirror/addon/lint/lint')
     require('codemirror/addon/display/placeholder')
     require('codemirror/keymap/sublime')
-    require('codemirror-graphql/hint')
+    // 'fork' of 'codemirror-graphql/hint' to accommodate history
+    require('./util/registerHintHelper')
     require('codemirror-graphql/lint')
     require('codemirror-graphql/mode')
 
@@ -100,15 +103,23 @@ export class QueryEditor extends React.Component<Props, {}> {
       },
       hintOptions: {
         schema: this.props.schema,
-        closeOnUnfocus: true,
+        closeOnUnfocus: false,
         completeSingle: false,
+        extraKeys: {
+          Right: (completion, handle) => {
+            const { selectedHint } = completion
+            if (selectedHint.text === 'history') {
+              handle.data.list[0].hint()
+            }
+          },
+        },
       },
       gutters,
       extraKeys: {
-        'Cmd-Space': () => this.editor.showHint({ completeSingle: true }),
-        'Ctrl-Space': () => this.editor.showHint({ completeSingle: true }),
-        'Alt-Space': () => this.editor.showHint({ completeSingle: true }),
-        'Shift-Space': () => this.editor.showHint({ completeSingle: true }),
+        'Cmd-Space': () => this.editor.showHint(),
+        'Ctrl-Space': () => this.editor.showHint(),
+        'Alt-Space': () => this.editor.showHint(),
+        'Shift-Space': () => this.editor.showHint(),
 
         'Cmd-Enter': () => {
           if (this.props.onRunQuery) {
@@ -217,6 +228,7 @@ export class QueryEditor extends React.Component<Props, {}> {
    * about the type and description for the selected context.
    */
   private onHasCompletion = (cm, data) => {
+    renderHistory(cm, data)
     onHasCompletion(cm, data, this.props.onHintInformationRender)
   }
 }
