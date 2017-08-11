@@ -1,16 +1,58 @@
 import * as React from 'react'
 import HistoryHint from './HistoryHint'
+import { $v, Icon } from 'graphcool-styles'
 
 export interface Props {
   hintLeftOffset: number
 }
 
-class HistoryOption extends React.Component<Props, {}> {
+/**
+ * historyItems would be of type Session[]
+ * I used any to mock up some additional functionality
+ */
+export interface State {
+  historyItems: any
+  selectedItem?: any
+}
+
+/**
+ * Including dummy history items until fetching is in place
+ */
+const historyItemsArr = [
+  {
+    id: 1,
+    query: '{\n' + '  allPosts{\n' + '    id\n' + '  }\n' + '}',
+  },
+  {
+    id: 2,
+    query: 'mutation{\n' + '  createFile{\n' + '    \n' + '  }\n' + '}',
+  },
+]
+
+class HistoryOption extends React.Component<Props, State> {
   constructor(props) {
     super(props)
+
+    this.state = {
+      historyItems: [],
+      selectedItem: {},
+    }
+  }
+
+  /**
+   * Mock data fetching would be replaced
+   * with async fetch of history items
+   */
+  componentDidMount() {
+    Promise.resolve().then(() => {
+      this.setState({
+        historyItems: historyItemsArr,
+      })
+    })
   }
 
   render() {
+    const { historyItems } = this.state
     return (
       <div>
         <style jsx={true}>{`
@@ -24,19 +66,37 @@ class HistoryOption extends React.Component<Props, {}> {
             top: 0;
           }
 
-          /* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
           .show {
             display: block;
           }
+
+          .history {
+            @inherit: .f14, .fw6, .pv10, .ph16, .bgBlue, .flex, .br2,
+              .itemsCenter, .pointer;
+          }
+          .history-text {
+            @inherit: .mr6, .white;
+          }
         `}</style>
         <div>
-          History
+          <div className="history">
+            <div className="history-text">History</div>
+            <Icon
+              src={require('../../../assets/icons/arrowRight.svg')}
+              color={$v.white}
+              stroke={true}
+              width={13}
+              height={13}
+            />
+          </div>
           <div
             id="history-menu"
             className="history-options"
             style={{ left: `${this.props.hintLeftOffset}px` }}
           >
-            <HistoryHint content="Test" />
+            {historyItems.map(item =>
+              <HistoryHint key={item.id} content={item.query} />,
+            )}
           </div>
         </div>
       </div>
