@@ -10,7 +10,6 @@ import * as React from 'react'
 import { GraphQLSchema } from 'graphql'
 
 import onHasCompletion from 'graphiql/dist/utility/onHasCompletion'
-import renderHistory from './util/renderHistory'
 
 /**
  * QueryEditor
@@ -228,7 +227,6 @@ export class QueryEditor extends React.Component<Props, {}> {
    * about the type and description for the selected context.
    */
   private onHasCompletion = (cm, data) => {
-    renderHistory(cm, data)
     onHasCompletion(cm, data, this.props.onHintInformationRender)
   }
 }
