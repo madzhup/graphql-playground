@@ -90,6 +90,7 @@ export interface State {
   theme: Theme
   autoReloadSchema: boolean
   useVim: boolean
+  useEncode: boolean
 
   shareAllTabs: boolean
   shareHttpHeaders: boolean
@@ -198,6 +199,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       theme: (localStorage.getItem('theme') as Theme) || 'dark',
       autoReloadSchema: false,
       useVim: localStorage.getItem('useVim') === 'true' || false,
+      useEncode: localStorage.getItem('useEncode') === 'true' || true,
       shareAllTabs: true,
       shareHttpHeaders: true,
       shareHistory: true,
@@ -523,7 +525,21 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     return this.props.endpoint + '/permissions'
   }
 
+  encode(values) {
+    const params = Object.keys(values).map((key) => {
+      let value = values[key];
+      if (typeof value !== 'string' && typeof value !== 'number') {
+        value = JSON.stringify(value);
+      }
+      return `${encodeURIComponent(key)}=${encodeURIComponent(value)}`;
+    }).join('&');
+    return params;
+  }
+
   fetchSchema(endpointUrl: string, headers: any = {}) {
+    const { useEncode } = this.state;
+    const data = { query: introspectionQuery };
+    const body = useEncode ? this.encode(data) : JSON.stringify(data);
     return fetch(endpointUrl, {
       // tslint:disable-line
       method: 'post',
@@ -532,7 +548,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
         'x-graphcool-source': 'console:playground',
         ...headers,
       },
-      body: JSON.stringify({ query: introspectionQuery }),
+      body,
     }).then(response => {
       return response.json()
     })
@@ -656,6 +672,8 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
             onChangeEndpoint={this.props.onChangeEndpoint}
             useVim={this.state.useVim}
             onToggleUseVim={this.toggleUseVim}
+            useEncode={this.state.useEncode}
+            onToggleUseEncode={this.toggleUseEncode}
             subscriptionsEndpoint={this.props.subscriptionsEndpoint || ''}
             onChangeSubscriptionsEndpoint={
               this.props.onChangeSubscriptionsEndpoint
@@ -1356,12 +1374,15 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       headers.Authorization = `Bearer ${session.selectedUserToken}`
     }
 
+    const { useEncode } = this.state;
+    const body = useEncode ? this.encode(graphQLParams) : JSON.stringify(graphQLParams);
+
     return fetch(endpoint, {
       // tslint:disable-line
       method: 'post',
       headers,
       credentials: 'include',
-      body: JSON.stringify(graphQLParams),
+      body,
     }).then(response => {
       if (typeof this.props.onSuccess === 'function') {
         this.props.onSuccess(graphQLParams, response)
@@ -1383,6 +1404,15 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       state => ({ ...state, useVim: !state.useVim }),
       () => {
         localStorage.setItem('useVim', String(this.state.useVim))
+      },
+    )
+  }
+
+  private toggleUseEncode = () => {
+    this.setState(
+      state => ({ ...state, useEncode: !state.useEncode }),
+      () => {
+        localStorage.setItem('useEncode', String(this.state.useEncode))
       },
     )
   }

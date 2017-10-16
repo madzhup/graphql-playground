@@ -115,7 +115,7 @@ export default class EndpointPopup extends React.Component<Props, State> {
               })}
               autoFocus={true}
             />
-            {valid && <Button onClick={this.close}>Use Endpoint</Button>}
+            <Button onClick={this.close}>Use Endpoint</Button>
           </form>
         </div>
       </Popup>

@@ -12,6 +12,8 @@ interface Props {
   onToggleReload: () => void
   useVim: boolean
   onToggleUseVim: () => void
+  useEncode: boolean
+  onToggleUseEncode: () => void
   autoReload: boolean
   onReload: () => void
   endpoint: string
@@ -42,6 +44,8 @@ export default class Settings extends React.Component<Props, State> {
       onReload,
       useVim,
       onToggleUseVim,
+      useEncode,
+      onToggleUseEncode,
     } = this.props
     return (
       <div className="settings">
@@ -132,6 +136,12 @@ export default class Settings extends React.Component<Props, State> {
                     VIM MODE{' '}
                   </span>
                   <ToggleButton checked={useVim} onChange={onToggleUseVim} />
+                </div>
+                <div className="row">
+                  <span className="tooltip-text" onClick={onToggleUseEncode}>
+                    ENCODE{' '}
+                  </span>
+                  <ToggleButton checked={useEncode} onChange={onToggleUseEncode} />
                 </div>
                 <div className="row">
                   <span className="tooltip-text" onClick={onToggleReload}>
